@@ -6,7 +6,7 @@ import {Filter} from "../../Filter/Filter";
 export class Home extends React.Component {
     render() {
         return (
-            <div className="container">
+            <div className="container container_big">
                 <Header/>
                 <Filter/>
             </div>
