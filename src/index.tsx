@@ -2,6 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 
 import "./index.scss"
+import "./fonts/fonts.scss"
 
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 

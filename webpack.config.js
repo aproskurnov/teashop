@@ -43,6 +43,16 @@ module.exports = {
                 ]
             },
             {
+                test: /\.(woff|woff2|eot|ttf|otf)$/,
+                use: [{
+                    loader: 'file-loader',
+                    options: {
+                        outputPath: './assets'
+                    }
+                }
+                ]
+            },
+            {
                 enforce: "pre",
                 test: /\.js$/,
                 loader: "source-map-loader"
