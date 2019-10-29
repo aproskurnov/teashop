@@ -1,0 +1,9 @@
+@import "../../globals";
+
+.favorite-button{
+  cursor: pointer;
+  color: $light-red;
+  border: none;
+  background-color: $white;
+  margin-bottom: 0.1rem;
+}

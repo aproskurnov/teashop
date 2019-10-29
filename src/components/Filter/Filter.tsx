@@ -3,21 +3,6 @@ import * as React from "react";
 import {Search} from "../Search/Search";
 import {Product} from "../Product/Product";
 
-interface Category{
-    id: number,
-    title: string
-}
-
-interface IProduct {
-    id: number,
-    title: string,
-    description: string,
-    new_product: boolean,
-    score: number,
-    category: Category
-
-}
-
 export class Filter extends React.Component<{}, {products:IProduct[]}> {
     constructor(props:Filter){
         super(props);
@@ -34,7 +19,7 @@ export class Filter extends React.Component<{}, {products:IProduct[]}> {
         let products:JSX.Element[] = [];
             this.state.products.map((v)=>{
                 let product = (
-                    <Product key={v.id}/>
+                    <Product key={v.id} data={v}/>
                 );
                 products.push(product);
             });

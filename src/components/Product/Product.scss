@@ -1,0 +1,46 @@
+@import "../../globals";
+
+.product{
+  &__rate{
+    margin-bottom: 1rem;
+  }
+  &__image-wrapper{
+    position: relative;
+  }
+  &__image{
+    width: 100%;
+  }
+  &__discount{
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    background-color: $light-red;
+    padding: 1rem 1.5rem;
+    color: $white;
+  }
+  &__info-interface{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+  }
+
+  &__price{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.3rem;
+  }
+  &__price-main{
+    &_crossed{
+      text-decoration: line-through;
+    }
+  }
+  &__price-discount{
+    color: $light-red;
+    margin-left: 0.5rem;
+  }
+  &__interface{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+}

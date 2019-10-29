@@ -1,0 +1,10 @@
+@import "../../globals";
+
+.rate{
+  &__input{
+    display: none;
+  }
+  &__element{
+    color: $yellow;
+  }
+}

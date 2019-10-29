@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import "./Button.scss";
+
 interface ButtonProps {
     text?: string;
 }
@@ -7,7 +9,7 @@ interface ButtonProps {
 export class Button extends React.Component<ButtonProps, {}> {
     render() {
         return (
-            <button>{this.props.text}</button>
+            <button className="button">{this.props.text}</button>
         );
     }
 }
