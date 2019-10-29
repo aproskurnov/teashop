@@ -1,6 +1,11 @@
 @import "../../globals";
 
 .product{
+  max-width: 300px;
+  padding: 0 1rem;
+  &:hover{
+    border: none;
+  }
   &__rate{
     margin-bottom: 1rem;
   }

@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import "./Filter.scss";
+
 import {Search} from "../Search/Search";
 import {Product} from "../Product/Product";
 
