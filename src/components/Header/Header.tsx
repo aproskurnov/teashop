@@ -15,7 +15,9 @@ export class Header extends React.Component {
     render() {
         return (
             <header className="header">
-                <img className="header__logo" src={logo} alt="TeaShop"/>
+                <Link to="/">
+                    <img className="header__logo" src={logo} alt="TeaShop"/>
+                </Link>
                 <div className="header__interface">
                     <div className="header__ico">
                         <Link to="/favorite">
