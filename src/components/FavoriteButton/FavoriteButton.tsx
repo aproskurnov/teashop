@@ -23,9 +23,9 @@ export class FavoriteButton extends React.Component<IFavoriteButtonProps, Favori
         toggle: false
     };
     handleClick(){
-        this.setState({
-            isToggleOn: !this.state.isToggleOn
-        })
+        this.setState((prevState)=> ({
+            isToggleOn: !prevState.isToggleOn
+        }));
     }
     render() {
         return (
