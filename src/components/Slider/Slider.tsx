@@ -29,7 +29,7 @@ export class Slider extends React.Component<ISliderProps, {}> {
                     <Input type={"number"} centered={true} value={this.props.value[1]} onChange={this.props.onRightChange}/>
                 </div>
                 <div className="slider__slider">
-                    <Range onChange={this.props.onSliderChange} value={this.props.value} min={this.props.min} max={this.props.max} allowCross={false}/>
+                    <Range onChange={this.props.onSliderChange} value={this.props.value} min={this.props.min} max={this.props.max} />
                 </div>
             </div>
         );
