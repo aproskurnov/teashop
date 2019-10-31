@@ -154,9 +154,8 @@ export class Filter extends React.Component<IFilterProps, IFilterState> {
     applyFilter(){
         this.setState((prevState)=>{
             this.filter = {...prevState.filter, price:[...prevState.filter.price], search:this.filter.search};
+            this.updateData();
         });
-
-        this.updateData();
     }
     createProducts(){
         let products:JSX.Element[] = [];
