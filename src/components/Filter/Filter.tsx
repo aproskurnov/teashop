@@ -9,6 +9,7 @@ import {FilterPanel} from "../FilterPanel/FilterPanel";
 interface IFilterProps {
     filterPanelShow: boolean,
     onClosePanel:(e:React.MouseEvent<HTMLElement>)=>void,
+    favorite: boolean
 }
 
 interface IFilterState {
@@ -76,6 +77,10 @@ export class Filter extends React.Component<IFilterProps, IFilterState> {
         if (this.filter.price.length){
             url.searchParams.append("price[]", this.filter.price[0].toString());
             url.searchParams.append("price[]", this.filter.price[1].toString());
+        }
+
+        if (this.props.favorite){
+            url.searchParams.append('favorite', (+this.props.favorite).toString())
         }
 
         fetch(url.toString(), {mode:'cors'})
