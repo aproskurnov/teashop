@@ -9,7 +9,7 @@ import {FilterPanel} from "../FilterPanel/FilterPanel";
 interface IFilterProps {
     filterPanelShow: boolean,
     onClosePanel:(e:React.MouseEvent<HTMLElement>)=>void,
-    favorite: boolean
+    favorite?: boolean
 }
 
 interface IFilterState {
@@ -54,6 +54,7 @@ export class Filter extends React.Component<IFilterProps, IFilterState> {
         this.onDiscountChange=this.onDiscountChange.bind(this);
         this.onApplyClick=this.onApplyClick.bind(this);
         this.applyFilter=this.applyFilter.bind(this);
+        this.onClickFavorite=this.onClickFavorite.bind(this);
 
     }
     componentDidMount() {
@@ -162,13 +163,31 @@ export class Filter extends React.Component<IFilterProps, IFilterState> {
             this.updateData();
         });
     }
+    onClickFavorite(id:number){
+        if(this.props.favorite){
+            this.setState((prevState)=>{
+                let products = prevState.products.filter((v)=>{
+                    return v.id !== id;
+                });
+                return {products:products};
+            });
+        }
+    }
     createProducts(){
         let products:JSX.Element[] = [];
             this.state.products.map((v)=>{
                 let product = (
-                    <Product key={v.id} data={v}/>
+                    <Product onClickFavorite={this.onClickFavorite} key={v.id} data={v}/>
                 );
-                products.push(product);
+                if (this.props.favorite){
+                    if (v.favorite){
+                        products.push(product);
+                    }
+                }else{
+                    products.push(product);
+                }
+
+
             });
         return products;
     }

@@ -8,7 +8,8 @@ import {Button} from "../Button/Button";
 import {Link} from "react-router-dom";
 
 interface ProductProps {
-    data:IProduct
+    data:IProduct,
+    onClickFavorite:(id:number)=>void
 }
 
 export class Product extends React.Component<ProductProps, {}> {
@@ -46,7 +47,7 @@ export class Product extends React.Component<ProductProps, {}> {
                     </div>
                     <div className="product__interface">
                         <div className="product__favoriteButton">
-                            <FavoriteButton toggle={this.props.data.favorite}/>
+                            <FavoriteButton onClick={this.props.onClickFavorite} id={this.props.data.id} toggle={this.props.data.favorite}/>
                         </div>
                         <Button text="В корзину"/>
                     </div>
