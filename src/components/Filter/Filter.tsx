@@ -29,14 +29,14 @@ export class Filter extends React.Component<IFilterProps, IFilterState> {
             puer: false,
             price: [],
             min: 0,
-            max: 50,
+            max: 0,
             new_product: false,
             discount: false,
             search: "",
         };
 
         this.state = {
-            filter: {...this.filter, price:[0, 50]},
+            filter: {...this.filter, price:[0, 0]},
             products:[]
         };
 
@@ -93,7 +93,7 @@ export class Filter extends React.Component<IFilterProps, IFilterState> {
         this.filter.max = data.price.max;
 
         this.setState(()=>{
-            return {filter:{...this.filter}, products:data.data};
+            return {filter:{...this.filter, price:[...this.filter.price]}, products:data.data};
         });
     }
     onSliderChange = (value:number[]) => {
@@ -152,7 +152,10 @@ export class Filter extends React.Component<IFilterProps, IFilterState> {
         this.props.onClosePanel(e);
     }
     applyFilter(){
-        this.filter = {...this.state.filter, price:this.state.filter.price, search:this.filter.search};
+        this.setState((prevState)=>{
+            this.filter = {...prevState.filter, price:[...prevState.filter.price], search:this.filter.search};
+        });
+
         this.updateData();
     }
     createProducts(){
