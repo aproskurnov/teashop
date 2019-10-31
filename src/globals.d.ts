@@ -8,6 +8,16 @@ interface ICategory{
     title: string
 }
 
+interface IPrice{
+    min:number,
+    max:number
+}
+
+interface IProductResp{
+    data: IProduct[],
+    price: IPrice
+}
+
 interface IProduct {
     id: number,
     title: string,
@@ -19,4 +29,17 @@ interface IProduct {
     image: string,
     rating: number,
     category: ICategory
+}
+
+interface IFilter{
+    green: boolean,
+    red: boolean,
+    white: boolean,
+    puer: boolean,
+    price: number[],
+    min: number,
+    max: number,
+    new_product: boolean,
+    discount: boolean,
+    search: string
 }

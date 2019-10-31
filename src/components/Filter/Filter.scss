@@ -1,4 +1,18 @@
 .filter{
+  display: flex;
+  &__panel{
+    max-width: 300px;
+
+    @media (min-width: 768px) {
+      margin-right: 5rem;
+    }
+  }
+  &__content{
+    width: 100%;
+    @media (min-width: 768px) {
+      margin-top: 5rem;
+    }
+  }
   &__products{
     display: flex;
     justify-content: center;

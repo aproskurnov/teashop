@@ -15,5 +15,10 @@
   }
   &__ico{
     margin: 2px;
+    &_filter{
+      @media (min-width: 768px) {
+        display: none;
+      }
+    }
   }
 }

@@ -11,14 +11,21 @@ import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 
 import logo from "./logo.png";
 
-export class Header extends React.Component {
+interface IHeaderProps {
+    onFilterClick:(e:React.MouseEvent<HTMLElement>)=>void
+}
+
+export class Header extends React.Component<IHeaderProps, {}> {
+    constructor(props:IHeaderProps){
+        super(props);
+    }
     render() {
         return (
             <header className="header">
                 <Link to="/">
                     <img className="header__logo" src={logo} alt="TeaShop"/>
                 </Link>
-                <div className="header__interface">
+                <nav className="header__interface">
                     <div className="header__ico">
                         <Link to="/favorite">
                             <FontAwesomeIcon icon={faHeart} size="2x" />
@@ -29,8 +36,8 @@ export class Header extends React.Component {
                             <FontAwesomeIcon icon={faUser} size="2x" />
                         </Link>
                     </div>
-                    <div className="header__ico">
-                        <Link to="#">
+                    <div className="header__ico header__ico_filter">
+                        <Link onClick={this.props.onFilterClick} to="#">
                             <FontAwesomeIcon icon={faCog} size="2x" />
                         </Link>
                     </div>
@@ -39,7 +46,7 @@ export class Header extends React.Component {
                             <FontAwesomeIcon icon={faShoppingCart} size="2x" />
                         </Link>
                     </div>
-                </div>
+                </nav>
             </header>
         );
     }
