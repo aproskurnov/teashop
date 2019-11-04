@@ -7,7 +7,7 @@ import {Route, Switch} from "react-router";
 import {Home} from "../pages/Home/Home";
 import {Favorite} from "../pages/Favorite/Favorite";
 import Login from "../pages/Login/Login";
-import {Register} from "../pages/Register/Register";
+import Register from "../pages/Register/Register";
 import {NoMatch} from "../pages/NoMatch/NoMatch";
 import {BrowserRouter as Router} from "react-router-dom";
 import {Provider} from "react-redux";

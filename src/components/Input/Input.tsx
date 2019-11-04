@@ -2,6 +2,8 @@ import * as React from "react";
 
 import "./Input.scss"
 
+import MaskedInput, {maskArray} from 'react-text-mask';
+
 interface InputProps {
     placeholder?:string,
     type?:string,
@@ -11,7 +13,8 @@ interface InputProps {
     onKeyDown?:(e:React.KeyboardEvent<HTMLInputElement>)=>void,
     defaultValue?:number,
     value?:string|number,
-    centered?:boolean
+    centered?:boolean,
+    mask?:maskArray | ((value: string) => maskArray)
 }
 
 export class Input extends React.Component<InputProps, {}> {
@@ -23,17 +26,39 @@ export class Input extends React.Component<InputProps, {}> {
         centered: false
     };
 
+    renderInput(){
+        if(this.props.mask){
+            return (
+                <MaskedInput className={"input__field" + (this.props.centered ? " input__field_centered" : "")}
+                       mask={this.props.mask}
+                       onKeyDown={this.props.onKeyDown}
+                       onChange={this.props.onChange}
+                       onBlur={this.props.onBlur}
+                       value={this.props.value}
+                       defaultValue={this.props.defaultValue}
+                       name={this.props.name}
+                       type={this.props.type}
+                       placeholder={this.props.placeholder}/>
+            );
+        }else{
+            return (
+                <input className={"input__field" + (this.props.centered ? " input__field_centered" : "")}
+                       onKeyDown={this.props.onKeyDown}
+                       onChange={this.props.onChange}
+                       onBlur={this.props.onBlur}
+                       value={this.props.value}
+                       defaultValue={this.props.defaultValue}
+                       name={this.props.name}
+                       type={this.props.type}
+                       placeholder={this.props.placeholder}/>
+            );
+        }
+    }
     render() {
         return (
-            <input className={"input" + (this.props.centered ? " input_centered" : "")}
-                   onKeyDown={this.props.onKeyDown}
-                   onChange={this.props.onChange}
-                   onBlur={this.props.onBlur}
-                   value={this.props.value}
-                   defaultValue={this.props.defaultValue}
-                   name={this.props.name}
-                   type={this.props.type}
-                   placeholder={this.props.placeholder}/>
+            <div className={"input"}>
+                {this.renderInput()}
+            </div>
         );
     }
 }
