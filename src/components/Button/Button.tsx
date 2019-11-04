@@ -5,12 +5,15 @@ import "./Button.scss";
 interface ButtonProps {
     text?: string,
     onClick?:(e:React.MouseEvent<HTMLElement>)=>void,
+    disabled?:boolean,
+    wide?:boolean
 }
 
 export class Button extends React.Component<ButtonProps, {}> {
     render() {
         return (
-            <button onClick={this.props.onClick} className="button">{this.props.text}</button>
+            <button disabled={this.props.disabled} onClick={this.props.onClick}
+                    className={"button" + (this.props.wide ? " button_wide" : "")}>{this.props.text}</button>
         );
     }
 }
