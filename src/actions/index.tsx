@@ -1,9 +1,11 @@
-import {EActionType, IAuthAction, IUserAuthData} from "./types"
+import {EActionType, IAuthAction, IUserAuth, IUserAuthData} from "./types"
 import {Dispatch} from "redux";
 
 
-export const loadData:any = () => (dispatch:Dispatch<IAuthAction>) => {
+export const loadData:any = () => (dispatch:Dispatch<IAuthAction>, getState:()=>IUserAuth) => {
     let url = new URL('http://api.' + window.location.host + '/user');
+    let data = getState();
+
     let fetchFunc = ()=>{
         fetch(url.toString(), {mode:'cors'})
             .then(response=>response.json())
@@ -16,10 +18,12 @@ export const loadData:any = () => (dispatch:Dispatch<IAuthAction>) => {
         );
     };
 
-    let token = localStorage.getItem('token');
-    if (token){
-        url.searchParams.append('api_token', token);
-        fetchFunc();
+    if (data.user) {
+        let token = localStorage.getItem('token');
+        if (token) {
+            url.searchParams.append('api_token', token);
+            fetchFunc();
+        }
     }
 
 };
@@ -37,5 +41,13 @@ export const loginFailAction = () => {
             type: EActionType.LOGIN_FAILED,
             data: null
         };
+    return action;
+};
+
+export const logoutAction = () => {
+    let action:IAuthAction = {
+        type: EActionType.LOGOUT_SUCCESS,
+        data: null
+    };
     return action;
 };

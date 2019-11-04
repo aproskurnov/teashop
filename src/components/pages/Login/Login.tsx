@@ -8,7 +8,6 @@ import {Input} from "../../Input/Input";
 import {Button} from "../../Button/Button";
 import {Link} from "react-router-dom";
 import {Header} from "../../Header/Header";
-import store from "../../../store"
 import {loginAction, loginFailAction} from "../../../actions";
 import { Redirect } from 'react-router-dom'
 import {connect} from 'react-redux'
@@ -60,7 +59,7 @@ class Login extends React.Component<Props, ILoginState> {
                     this.props.loginSuccess(data);
                 }
             }).catch(()=> {
-                store.dispatch(loginFailAction());
+                this.props.loginFail();
         });
     }
     redirect(){

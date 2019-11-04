@@ -13,6 +13,7 @@ import {BrowserRouter as Router} from "react-router-dom";
 import {Provider} from "react-redux";
 import store from '../../store';
 import {loadData} from "../../actions";
+import Logout from "../pages/Logout/Logout";
 
 
 
@@ -37,6 +38,9 @@ export class App extends React.Component<{}, {}> {
                     </Route>
                     <Route path="/login">
                         <Login/>
+                    </Route>
+                    <Route path="/logout">
+                        <Logout/>
                     </Route>
                     <Route path="/register">
                         <Register/>
