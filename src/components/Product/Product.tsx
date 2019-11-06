@@ -13,7 +13,8 @@ import {connect} from "react-redux";
 
 interface IProductProps {
     data:IProduct,
-    onClickFavorite:(id:number)=>void
+    onClickFavorite?:(id:number)=>void,
+    linked?: boolean
 }
 
 interface IStateProps{
@@ -26,14 +27,33 @@ interface IDispatchProps{
 type Props = IProductProps & IStateProps & IDispatchProps;
 
 class Product extends React.Component<Props, {}> {
+    static defaultProps = {
+        linked: true
+    };
     constructor(props:Props) {
         super(props);
 
         this.onClickAdd = this.onClickAdd.bind(this);
+        this.handlerFavoriteClick = this.handlerFavoriteClick.bind(this);
     }
     onClickAdd(){
         let product = {...this.props.data};
         this.props.addProduct(product);
+    }
+    handlerFavoriteClick(){
+        if (this.props.onClickFavorite){
+            this.props.onClickFavorite(this.props.data.id);
+        }
+    }
+    showLinked(child:JSX.Element){
+
+        if (this.props.linked){
+            return (
+                <Link to={"/tea/" + this.props.data.id}> {child} </Link>
+            );
+        }else{
+            return child;
+        }
     }
     render() {
         return (
@@ -42,14 +62,14 @@ class Product extends React.Component<Props, {}> {
                 <div className="product__rate">
                     <Rate name={"rate"+this.props.data.id} rating={this.props.data.rating} disabled={true}/>
                 </div>
-                <Link to={"/tea/" + this.props.data.id}>
-                    <div className="product__image-wrapper">
-                        <img className="product__image" src={this.props.data.image} alt={this.props.data.title}/>
-                        {!!this.props.data.discount &&
-                        <div className="product__discount">-{this.props.data.discount}%</div>
-                        }
-                    </div>
-                </Link>
+                {this.showLinked(
+                        <div className="product__image-wrapper">
+                            <img className="product__image" src={this.props.data.image} alt={this.props.data.title}/>
+                            {!!this.props.data.discount &&
+                            <div className="product__discount">-{this.props.data.discount}%</div>
+                            }
+                        </div>
+                )}
                 <div className="product__info-interface">
                     <div className="product__info">
                         <div className="product__weight">50г</div>
@@ -64,7 +84,7 @@ class Product extends React.Component<Props, {}> {
                     </div>
                     <div className="product__interface">
                         <div className="product__favoriteButton">
-                            <FavoriteButton onClick={this.props.onClickFavorite} id={this.props.data.id} toggle={this.props.data.favorite}/>
+                            <FavoriteButton onClick={this.handlerFavoriteClick} id={this.props.data.id} toggle={this.props.data.favorite}/>
                         </div>
                         <Button onClick={this.onClickAdd} text="В корзину"/>
                     </div>

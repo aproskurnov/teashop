@@ -14,6 +14,7 @@ import {Provider} from "react-redux";
 import store from '../../store';
 import {loadData} from "../../actions";
 import Logout from "../pages/Logout/Logout";
+import {Tea} from "../pages/Tea/Tea";
 
 
 
@@ -45,6 +46,7 @@ export class App extends React.Component<{}, {}> {
                     <Route path="/register">
                         <Register/>
                     </Route>
+                    <Route path={"/tea/:id"} component={Tea}/>
                     <Route path="*">
                         <NoMatch/>
                     </Route>

@@ -1,7 +1,18 @@
 import * as React from "react";
 
+import "./NoMatch.scss";
+
+import Header from "../../Header/Header";
+
 export class NoMatch extends React.Component {
     render() {
-        return <h1>404</h1>;
+        return (
+            <div className="container container_big">
+                <Header filterPanel={false}/>
+                <div className="no-match">
+                    <h1>404</h1>
+                </div>
+            </div>
+                );
     }
 }
