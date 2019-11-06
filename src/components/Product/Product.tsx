@@ -6,18 +6,35 @@ import {Rate} from "../Rate/Rate";
 import {FavoriteButton} from "../FavoriteButton/FavoriteButton";
 import {Button} from "../Button/Button";
 import {Link} from "react-router-dom";
+import {ICartAction, IRootReducer} from "../../actions/types";
+import {Dispatch} from "redux";
+import {addProductAction} from "../../actions";
+import {connect} from "react-redux";
 
-interface ProductProps {
+interface IProductProps {
     data:IProduct,
     onClickFavorite:(id:number)=>void
 }
 
-export class Product extends React.Component<ProductProps, {}> {
-    constructor(props:ProductProps) {
+interface IStateProps{
+}
+
+interface IDispatchProps{
+    addProduct: (product: IProduct)=>void,
+}
+
+type Props = IProductProps & IStateProps & IDispatchProps;
+
+class Product extends React.Component<Props, {}> {
+    constructor(props:Props) {
         super(props);
 
+        this.onClickAdd = this.onClickAdd.bind(this);
     }
-
+    onClickAdd(){
+        let product = {...this.props.data};
+        this.props.addProduct(product);
+    }
     render() {
         return (
             <section className="product">
@@ -49,10 +66,24 @@ export class Product extends React.Component<ProductProps, {}> {
                         <div className="product__favoriteButton">
                             <FavoriteButton onClick={this.props.onClickFavorite} id={this.props.data.id} toggle={this.props.data.favorite}/>
                         </div>
-                        <Button text="В корзину"/>
+                        <Button onClick={this.onClickAdd} text="В корзину"/>
                     </div>
                 </div>
             </section>
         );
     }
 }
+
+const mapStateToProps:(state:IRootReducer)=>IStateProps = (state)=>{
+    return {
+        isAuthenticated:state.auth.isAuthenticated
+    }
+};
+
+const mapDispatchToProps:(dispatch:Dispatch<ICartAction>)=>IDispatchProps = (dispatch) => {
+    return {
+        addProduct: (product: IProduct) => dispatch(addProductAction(product)),
+    }
+};
+
+export default connect<IStateProps, IDispatchProps, IProductProps>(mapStateToProps, mapDispatchToProps)(Product);

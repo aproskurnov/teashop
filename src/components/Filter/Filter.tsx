@@ -3,7 +3,7 @@ import * as React from "react";
 import "./Filter.scss";
 
 import {Search} from "../Search/Search";
-import {Product} from "../Product/Product";
+import Product from "../Product/Product";
 import {FilterPanel} from "../FilterPanel/FilterPanel";
 
 interface IFilterProps {

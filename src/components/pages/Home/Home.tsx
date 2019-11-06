@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import {Header} from "../../Header/Header";
+import Header from "../../Header/Header";
 import {Filter} from "../../Filter/Filter";
 
 interface IHomeState{

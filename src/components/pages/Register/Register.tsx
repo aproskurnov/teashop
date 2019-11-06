@@ -2,7 +2,7 @@ import * as React from "react";
 
 import "./Register.scss";
 
-import {Header} from "../../Header/Header";
+import Header from "../../Header/Header";
 import {Form, Formik, FormikBag, FormikProps, FormikValues} from "formik";
 import RegisterFormSchema from "../Register/RegisterFormSchema";
 import {Input} from "../../Input/Input";

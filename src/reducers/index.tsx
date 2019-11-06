@@ -1,34 +1,10 @@
-import {EActionType, IAuthAction, IUserAuth} from "../actions/types"
+import {combineReducers} from 'redux';
+import {authReducer} from "./authReducer";
+import {cartReducer} from "./cartReducer";
 
-
-const initialState: IUserAuth = {
-    token: localStorage.getItem('token'),
-    isAuthenticated: false,
-    user: null
-};
-
-const reducer = ( state = initialState, action:IAuthAction )=>{
-
-    switch (action.type) {
-        case EActionType.LOGIN_SUCCESS:
-        case EActionType.REGISTER_SUCCESS:
-            return {
-                ...state,
-                isAuthenticated: true,
-                token: action.data.token,
-                user: action.data.user
-            };
-        case EActionType.LOGIN_FAILED:
-        case EActionType.LOGOUT_SUCCESS:
-            return {
-                ...state,
-                isAuthenticated: false,
-                user: null
-            };
-        default:
-            return state;
-
-    }
-};
+const reducer = combineReducers({
+    auth: authReducer,
+    cart: cartReducer
+});
 
 export default reducer;

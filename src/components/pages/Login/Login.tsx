@@ -7,11 +7,11 @@ import LoginFormSchema from "./LoginFormSchema";
 import {Input} from "../../Input/Input";
 import {Button} from "../../Button/Button";
 import {Link} from "react-router-dom";
-import {Header} from "../../Header/Header";
+import Header from "../../Header/Header";
 import {loginAction, loginFailAction} from "../../../actions";
 import { Redirect } from 'react-router-dom'
 import {connect} from 'react-redux'
-import {IAuthAction, IUserAuth, IUserAuthData} from "../../../actions/types";
+import {IAuthAction, IRootReducer, IUserAuthData} from "../../../actions/types";
 import {Dispatch} from "redux";
 
 interface ILoginProps{
@@ -127,9 +127,9 @@ class Login extends React.Component<Props, ILoginState> {
     }
 }
 
-const mapStateToProps:(state:IUserAuth)=>IStateProps = (state)=>{
+const mapStateToProps:(state:IRootReducer)=>IStateProps = (state)=>{
     return {
-        isAuthenticated:state.isAuthenticated
+        isAuthenticated:state.auth.isAuthenticated
     }
 };
 

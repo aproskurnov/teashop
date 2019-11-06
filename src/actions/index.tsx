@@ -1,4 +1,4 @@
-import {EActionType, IAuthAction, IUserAuth, IUserAuthData} from "./types"
+import {EActionType, ECartAction, IAuthAction, ICartAddAction, IUserAuth, IUserAuthData} from "./types"
 import {Dispatch} from "redux";
 
 
@@ -48,6 +48,14 @@ export const logoutAction = () => {
     let action:IAuthAction = {
         type: EActionType.LOGOUT_SUCCESS,
         data: null
+    };
+    return action;
+};
+
+export const addProductAction = (product: IProduct) => {
+    let action:ICartAddAction = {
+        type: ECartAction.ADD_PRODUCT,
+        product: {...product, count:1}
     };
     return action;
 };
