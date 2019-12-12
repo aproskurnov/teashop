@@ -1,62 +1,68 @@
-import Product from "../../Product/Product";
-import * as React from "react";
+import * as React from 'react';
+import { match as Match } from 'react-router-dom';
 
-import "./Tea.scss";
+import './Tea.scss';
 
-import Header from "../../Header/Header";
+import Product from '../../Product/Product';
+import Header from '../../Header/Header';
 
-import {match} from "react-router-dom";
-
-interface ITeaMatch{
-    id: string
+interface TeaMatch {
+  id: string;
 }
 
-interface ITeaProps{
-    match: match<ITeaMatch>
+interface TeaProps {
+  match: Match<TeaMatch>;
 }
 
-interface ITeaState {
-    product: IProduct
+interface TeaState {
+  product: ProductData;
 }
 
-export class Tea extends React.Component<ITeaProps, ITeaState> {
-    constructor(props: ITeaProps) {
-        super(props);
+class Tea extends React.Component<TeaProps, TeaState> {
+  constructor(props: TeaProps) {
+    super(props);
 
-        let product:IProduct = {
-            id: 0,
-            title: "",
-            description: "",
-            discount: 0,
-            price: 0,
-            new_product: false,
-            favorite: false,
-            image: "",
-            rating: 0,
-            category: {id:0, title: ""}
-        };
-        this.state = {product};
-    }
+    const product: ProductData = {
+      id: 0,
+      title: '',
+      description: '',
+      discount: 0,
+      price: 0,
+      new_product: false,
+      favorite: false,
+      image: '',
+      rating: 0,
+      category: { id: 0, title: '' },
+    };
+    this.state = { product };
+  }
 
+  componentDidMount(): void {
+    const { match } = this.props;
+    const url = new URL(`http://api.${window.location.host}/tea/${match.params.id}`);
+    fetch(url.toString(), { mode: 'cors' })
+      .then(response => response.json())
+      .then(data => {
+        this.setState({ product: data });
+        return null;
+      })
+      .catch(e => {
+        throw new Error(e);
+      });
+  }
 
-    componentDidMount () {
-        let url = new URL('http://api.' + window.location.host + '/tea/' + this.props.match.params.id);
-        fetch(url.toString(), {mode:'cors'})
-            .then(response=>response.json())
-            .then(data=>{
-                this.setState({product: data})
-            });
-    }
-
-    render() {
-        return (
-            <div className="container container_big">
-                <Header filterPanel={false}/>
-                <div className="tea">
-                    <Product linked={false} data={this.state.product}/>
-                    <div className="tea__description">{this.state.product.description}</div>
-                </div>
-            </div>
-        );
-    }
+  render(): React.ReactNode {
+    const { product } = this.state;
+    return (
+      <div className="container container_big">
+        <Header filterPanel={false} />
+        <div className="tea">
+          <Product linked={false} data={product} />
+          <div className="tea__description">{product.description}</div>
+        </div>
+      </div>
+    );
+  }
 }
+
+export default Tea;

@@ -1,37 +1,36 @@
-import * as React from "react";
+import React, { useState } from 'react';
 
-import "./Checkbox.scss"
+import './Checkbox.scss';
 
-interface ICheckboxProps {
-    text:string,
-    name: string,
-    checked?: boolean,
-    onChangeCheckbox?:(e:React.ChangeEvent<HTMLElement>)=>void,
+interface CheckboxProps {
+  text: string;
+  name: string;
+  checked?: boolean;
+  onChangeCheckbox?: (e: React.ChangeEvent) => void;
 }
 
-interface ICheckboxState {
-    isChecked: boolean
-}
+const Checkbox: React.FunctionComponent<CheckboxProps> = ({ onChangeCheckbox, checked, name, text }) => {
+  const [toggle, setToggle] = useState(checked);
+  const onChange = (e: React.ChangeEvent): void => {
+    setToggle(!toggle);
+    if (onChangeCheckbox) {
+      onChangeCheckbox(e);
+    }
+  };
 
-export class Checkbox extends React.Component<ICheckboxProps, ICheckboxState> {
-    static defaultProps = {
-        checked: false
-    };
-    constructor(props:ICheckboxProps){
-        super(props);
-    }
-    onChange(){
-        this.setState(prevState=>{!prevState.isChecked})
-    }
-    render() {
-        return (
-            <div className="checkbox">
-                <label className="checkbox__content">
-                    <input className="checkbox__input" onChange={this.props.onChangeCheckbox} type="checkbox" name={this.props.name} checked={this.props.checked}/>
-                    <div className="checkbox__element"/>
-                    <div className="checkbox__label">{this.props.text}</div>
-                </label>
-            </div>
-        );
-    }
-}
+  return (
+    <div className="checkbox">
+      <label htmlFor={name} className="checkbox__content">
+        <input id={name} className="checkbox__input" onChange={onChange} type="checkbox" name={name} checked={toggle} />
+        <div className="checkbox__element" />
+        <div className="checkbox__label">{text}</div>
+      </label>
+    </div>
+  );
+};
+
+Checkbox.defaultProps = {
+  checked: false,
+};
+
+export default Checkbox;

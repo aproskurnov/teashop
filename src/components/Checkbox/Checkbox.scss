@@ -1,14 +1,14 @@
-@import "../../globals";
+@import '../../globals';
 
-.checkbox{
-  &__content{
+.checkbox {
+  &__content {
     display: inline-flex;
     cursor: pointer;
   }
-  &__input{
+  &__input {
     &:checked + .checkbox__element {
       &::before {
-        content: "";
+        content: '';
         display: block;
         position: absolute;
         top: 0.2rem;
@@ -22,13 +22,13 @@
     }
     display: none;
   }
-  &__element{
+  &__element {
     position: relative;
     width: 1.8rem;
     height: 1.8rem;
     border: 1px solid $dark-10;
   }
-  &__label{
+  &__label {
     align-self: center;
     margin-left: 1.5rem;
   }

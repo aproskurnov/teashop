@@ -1,7 +1,7 @@
-@import "../../globals";
+@import '../../globals';
 
-.input{
-  &__field{
+.input {
+  &__field {
     box-sizing: border-box;
     border: 1px solid $dark-10;
     border-left: none;
@@ -11,14 +11,13 @@
     padding: 2rem 0 2rem 1rem;
     min-width: 0; //hack for firefox
 
-    &:focus{
+    &:focus {
       outline: none;
       border-bottom: 1px solid $dark;
     }
-    &_centered{
+    &_centered {
       text-align: center;
       padding-left: 0;
     }
   }
-
 }

@@ -1,45 +1,29 @@
 import * as React from 'react';
 
-import './Product.scss';
+// import './CartProduct.scss';
 
 import { Link } from 'react-router-dom';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import Rate from '../Rate/Rate';
-import { FavoriteButton } from '../FavoriteButton/FavoriteButton';
-import { Button } from '../Button/Button';
+import FavoriteButton from '../FavoriteButton/FavoriteButton';
 import { CartAction, RootReducer, CartAddAction } from '../../actions/types';
 import { addProductAction } from '../../actions';
 
-interface ProductProps {
+interface CartProductProps {
   data: ProductData;
-  onClickFavorite?: (id: number) => void;
-  linked?: boolean;
+  count: number;
 }
 
 interface DispatchProps {
   addProduct: (product: ProductData) => void;
 }
 
-type Props = ProductProps & DispatchProps;
+type Props = CartProductProps & DispatchProps;
 
-const Product: React.FunctionComponent<Props> = ({ data, onClickFavorite, linked, addProduct }: Props) => {
-  const onClickAdd = (): void => {
-    const product = { ...data };
-    addProduct(product);
-  };
-
-  const handlerFavoriteClick = (): void => {
-    if (onClickFavorite) {
-      onClickFavorite(data.id);
-    }
-  };
-
+const CartProduct: React.FunctionComponent<Props> = ({ data }) => {
   const showLinked = (child: JSX.Element): JSX.Element => {
-    if (linked) {
-      return <Link to={`/tea/${data.id}`}> {child} </Link>;
-    }
-    return child;
+    return <Link to={`/tea/${data.id}`}> {child} </Link>;
   };
 
   const calculateDiscount = (): number => {
@@ -72,17 +56,12 @@ const Product: React.FunctionComponent<Props> = ({ data, onClickFavorite, linked
         </div>
         <div className="product__interface">
           <div className="product__favoriteButton">
-            <FavoriteButton onClick={handlerFavoriteClick} id={data.id} toggle={data.favorite} />
+            <FavoriteButton id={data.id} toggle={data.favorite} />
           </div>
-          <Button onClick={onClickAdd} text="В корзину" />
         </div>
       </div>
     </section>
   );
-};
-
-Product.defaultProps = {
-  linked: true,
 };
 
 const mapStateToProps: (state: RootReducer) => {} = state => {
@@ -97,4 +76,4 @@ const mapDispatchToProps: (dispatch: Dispatch<CartAction>) => DispatchProps = di
   };
 };
 
-export default connect<{}, DispatchProps, ProductProps>(mapStateToProps, mapDispatchToProps)(Product);
+export default connect<{}, DispatchProps, CartProductProps>(mapStateToProps, mapDispatchToProps)(CartProduct);

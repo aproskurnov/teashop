@@ -1,143 +1,134 @@
-import * as React from "react";
+import * as React from 'react';
 
-import "./Login.scss";
+import './Login.scss';
 
-import {Formik, Form, FormikBag, FormikValues, FormikProps} from "formik"
-import LoginFormSchema from "./LoginFormSchema";
-import {Input} from "../../Input/Input";
-import {Button} from "../../Button/Button";
-import {Link} from "react-router-dom";
-import Header from "../../Header/Header";
-import {loginAction, loginFailAction} from "../../../actions";
-import { Redirect } from 'react-router-dom'
-import {connect} from 'react-redux'
-import {IAuthAction, IRootReducer, IUserAuthData} from "../../../actions/types";
-import {Dispatch} from "redux";
+import { Formik, Form, FormikBag, FormikValues, FormikProps } from 'formik';
+import { Link, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+import LoginFormSchema from './LoginFormSchema';
+import Input from '../../Input/Input';
+import { Button } from '../../Button/Button';
+import Header from '../../Header/Header';
+import { loginAction, loginFailAction } from '../../../actions';
 
-interface ILoginProps{
+import { AuthAction, RootReducer, UserAuthData } from '../../../actions/types';
 
+interface StateProps {
+  isAuthenticated: boolean;
+}
+interface DispatchProps {
+  loginSuccess: (data: UserAuthData) => void;
+  loginFail: () => void;
 }
 
-interface ILoginState{
+type Props = StateProps & DispatchProps;
 
-}
-
-interface IStateProps{
-    isAuthenticated: boolean
-}
-interface IDispatchProps{
-    loginSuccess: (data: IUserAuthData)=>void,
-    loginFail: ()=>void
-}
-
-type Props = ILoginProps & IStateProps & IDispatchProps;
-
-
-class Login extends React.Component<Props, ILoginState> {
-    constructor(props:Props){
-        super(props);
-
-        this.handleSubmit=this.handleSubmit.bind(this);
+class Login extends React.Component<Props, {}> {
+  redirect = (): JSX.Element => {
+    const { isAuthenticated } = this.props;
+    if (isAuthenticated) {
+      return <Redirect to="/" />;
     }
-    handleSubmit(values:FormikValues, { setErrors }: FormikBag<FormikProps<FormikValues>, FormikValues> ){
-        let url = new URL('http://api.' + window.location.host + '/login');
-        fetch(url.toString(), {
-            mode:'cors',
-            method: 'POST',
-            body: JSON.stringify(values),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(response=>response.json())
-            .then(data=>{
-                if (data.error){
-                    this.props.loginFail();
-                    setErrors(data.error);
-                }else{
-                    localStorage.setItem('token', data.token);
-                    this.props.loginSuccess(data);
-                }
-            }).catch(()=> {
-                this.props.loginFail();
-        });
-    }
-    redirect(){
-        if (this.props.isAuthenticated){
-            return <Redirect to={"/"}/>;
+    return null;
+  };
+
+  handleSubmit = (values: FormikValues, { setErrors }: FormikBag<FormikProps<FormikValues>, FormikValues>): void => {
+    const url = new URL(`http://api.${window.location.host}/login`);
+    const { loginFail, loginSuccess } = this.props;
+    fetch(url.toString(), {
+      mode: 'cors',
+      method: 'POST',
+      body: JSON.stringify(values),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          loginFail();
+          setErrors(data.error);
+        } else {
+          localStorage.setItem('token', data.token);
+          loginSuccess(data);
         }
-    }
-    render() {
-        return (
-            <div className="container container_big">
-                {this.redirect()}
-                <Header filterPanel={false}/>
-                <div className="login">
-                    <h2 className={"login__title"}>Вход</h2>
-                    <Formik
-                        initialValues={{email:"", password:""}}
-                        validationSchema={LoginFormSchema}
-                        onSubmit={this.handleSubmit}
-                    >
-                        {({
-                              values,
-                              errors,
-                              isSubmitting,
-                              handleChange,
-                              handleBlur
+        return null;
+      })
+      .catch(() => {
+        loginFail();
+      });
+  };
 
-                          })=>(
-                            <Form>
-                                <div className="login__field">
-                                    <Input type={"email"} name={"email"} placeholder={"Email"}
-                                           onChange={handleChange}
-                                           onBlur={handleBlur}
-                                           value={values.email}
-                                           centered={true}
-                                    />
+  render = (): JSX.Element => {
+    return (
+      <div className="container container_big">
+        {this.redirect()}
+        <Header filterPanel={false} />
+        <div className="login">
+          <h2 className="login__title">Вход</h2>
+          <Formik
+            initialValues={{ email: '', password: '' }}
+            validationSchema={LoginFormSchema}
+            onSubmit={this.handleSubmit}
+          >
+            {({ values, errors, isSubmitting, handleChange, handleBlur }): JSX.Element => (
+              <Form>
+                <div className="login__field">
+                  <Input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.email}
+                    centered
+                  />
 
-                                    <div className="login__error">
-                                        {errors.email}
-                                    </div>
-                                </div>
-                                <div className="login__field">
-                                    <Input type={"password"} name={"password"} placeholder={"Пароль"}
-                                           onChange={handleChange}
-                                           onBlur={handleBlur}
-                                           value={values.password}
-                                           centered={true}
-                                    />
-
-                                    <div className="login__error">
-                                        {errors.password}
-                                    </div>
-                                </div>
-                                <div className="login__button">
-                                    <Button text="Войти" wide={true} disabled={isSubmitting}/>
-                                </div>
-                                <div className="login__register-info">
-                                    Нет аккаунта? <Link to={"/register"}><span className="login__register-link">Зарегистрироваться</span></Link>
-                                </div>
-                            </Form>
-                        )}
-                    </Formik>
+                  <div className="login__error">{errors.email}</div>
                 </div>
-            </div>
-        );
-    }
+                <div className="login__field">
+                  <Input
+                    type="password"
+                    name="password"
+                    placeholder="Пароль"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.password}
+                    centered
+                  />
+
+                  <div className="login__error">{errors.password}</div>
+                </div>
+                <div className="login__button">
+                  <Button text="Войти" wide disabled={isSubmitting} />
+                </div>
+                <div className="login__register-info">
+                  Нет аккаунта?{' '}
+                  <Link to="/register">
+                    <span className="login__register-link">Зарегистрироваться</span>
+                  </Link>
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </div>
+      </div>
+    );
+  };
 }
 
-const mapStateToProps:(state:IRootReducer)=>IStateProps = (state)=>{
-    return {
-        isAuthenticated:state.auth.isAuthenticated
-    }
+const mapStateToProps: (state: RootReducer) => StateProps = state => {
+  return {
+    isAuthenticated: state.auth.isAuthenticated,
+  };
 };
 
-const mapDispatchToProps:(dispatch:Dispatch<IAuthAction>)=>IDispatchProps = (dispatch) => {
-    return {
-        loginSuccess: (data: IUserAuthData) => dispatch(loginAction(data)),
-        loginFail: ()=>dispatch(loginFailAction())
-    }
+const mapDispatchToProps: (dispatch: Dispatch<AuthAction>) => DispatchProps = dispatch => {
+  return {
+    loginSuccess: (data: UserAuthData): AuthAction => dispatch(loginAction(data)),
+    loginFail: (): AuthAction => dispatch(loginFailAction()),
+  };
 };
 
-export default connect<IStateProps, IDispatchProps, ILoginProps>(mapStateToProps, mapDispatchToProps)(Login);
+export default connect<StateProps, DispatchProps, {}>(mapStateToProps, mapDispatchToProps)(Login);

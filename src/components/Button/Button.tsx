@@ -1,19 +1,20 @@
-import * as React from "react";
+import * as React from 'react';
 
-import "./Button.scss";
+import './Button.scss';
 
 interface ButtonProps {
-    text?: string,
-    onClick?:(e:React.MouseEvent<HTMLElement>)=>void,
-    disabled?:boolean,
-    wide?:boolean
+  text?: string;
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
+  disabled?: boolean;
+  wide?: boolean;
 }
 
-export class Button extends React.Component<ButtonProps, {}> {
-    render() {
-        return (
-            <button disabled={this.props.disabled} onClick={this.props.onClick}
-                    className={"button" + (this.props.wide ? " button_wide" : "")}>{this.props.text}</button>
-        );
-    }
-}
+const Button: React.FunctionComponent<ButtonProps> = ({ text, onClick, disabled, wide }) => {
+  return (
+    <button type="submit" disabled={disabled} onClick={onClick} className={`button${wide ? ' button_wide' : ''}`}>
+      {text}
+    </button>
+  );
+};
+
+export default Button;

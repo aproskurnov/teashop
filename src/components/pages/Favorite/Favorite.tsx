@@ -1,31 +1,34 @@
-import * as React from "react";
-import Header from "../../Header/Header";
-import {Filter} from "../../Filter/Filter";
+import * as React from 'react';
+import Header from '../../Header/Header';
+import { Filter } from '../../Filter/Filter';
 
-interface IFilterState{
-    isFilterPanelShow: boolean
+interface FilterState {
+  isFilterPanelShow: boolean;
 }
 
-export class Favorite extends React.Component<{}, IFilterState> {
-    constructor(props:{}) {
-        super(props);
-        this.state = {isFilterPanelShow:false};
+class Favorite extends React.Component<{}, FilterState> {
+  constructor(props: {}) {
+    super(props);
+    this.state = { isFilterPanelShow: false };
+  }
 
-        this.onFilterClick = this.onFilterClick.bind(this);
-        this.onFilterPanelClose = this.onFilterPanelClose.bind(this);
-    }
-    onFilterPanelClose(){
-        this.setState({isFilterPanelShow: false})
-    }
-    onFilterClick(){
-        this.setState({isFilterPanelShow: true})
-    }
-    render() {
-        return (
-            <div className="container container_big">
-                <Header onFilterClick={this.onFilterClick}/>
-                <Filter favorite={true} onClosePanel={this.onFilterPanelClose} filterPanelShow={this.state.isFilterPanelShow}/>
-            </div>
-        );
-    }
+  onFilterPanelClose = (): void => {
+    this.setState({ isFilterPanelShow: false });
+  };
+
+  onFilterClick = (): void => {
+    this.setState({ isFilterPanelShow: true });
+  };
+
+  render = (): JSX.Element => {
+    const { isFilterPanelShow } = this.state;
+    return (
+      <div className="container container_big">
+        <Header onFilterClick={this.onFilterClick} />
+        <Filter favorite onClosePanel={this.onFilterPanelClose} filterPanelShow={isFilterPanelShow} />
+      </div>
+    );
+  };
 }
+
+export default Favorite;

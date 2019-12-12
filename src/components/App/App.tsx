@@ -15,6 +15,7 @@ import store from '../../store';
 import {loadData} from "../../actions";
 import Logout from "../pages/Logout/Logout";
 import {Tea} from "../pages/Tea/Tea";
+import {Cart} from "../pages/Cart/Cart";
 
 
 
@@ -36,6 +37,9 @@ export class App extends React.Component<{}, {}> {
                     </Route>
                     <Route path="/favorite">
                         <Favorite/>
+                    </Route>
+                    <Route path="/cart">
+                        <Cart/>
                     </Route>
                     <Route path="/login">
                         <Login/>

@@ -1,27 +1,33 @@
-import * as React from "react";
+import * as React from 'react';
 
-import {Input} from "../Input/Input";
+import { Input } from '../Input/Input';
 
-interface ISearchProps{
-    onChange:(e:React.ChangeEvent<HTMLInputElement>)=>void,
-    onPressEnter:(e:React.KeyboardEvent<HTMLInputElement>)=>void
+interface SearchProps {
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onPressEnter: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
-export class Search extends React.Component<ISearchProps, {}> {
-    constructor(props:ISearchProps){
-        super(props);
-        this.onKeyDown = this.onKeyDown.bind(this);
+class Search extends React.Component<SearchProps, {}> {
+  constructor(props: SearchProps) {
+    super(props);
+    this.onKeyDown = this.onKeyDown.bind(this);
+  }
+
+  onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
+    const { onPressEnter } = this.props;
+    if (e.key === 'Enter') {
+      onPressEnter(e);
     }
-    onKeyDown(e:React.KeyboardEvent<HTMLInputElement>){
-        if (e.key === 'Enter'){
-            this.props.onPressEnter(e);
-        }
-    }
-    render() {
-        return (
-            <div className="search">
-                <Input onKeyDown={this.onKeyDown} onChange={this.props.onChange} placeholder="Найти..."/>
-            </div>
-        );
-    }
+  };
+
+  render = (): JSX.Element => {
+    const { onChange } = this.props;
+    return (
+      <div className="search">
+        <Input onKeyDown={this.onKeyDown} onChange={onChange} placeholder="Найти..." />
+      </div>
+    );
+  };
 }
+
+export default Search;

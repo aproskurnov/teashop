@@ -1,9 +1,5 @@
-import * as React from "react";
+import * as React from 'react';
 
-export class Review extends React.Component {
-    render() {
-        return (
-            <div>Review</div>
-        );
-    }
-}
+const Review: React.FunctionComponent<{}> = () => <div>Review</div>;
+
+export default Review;

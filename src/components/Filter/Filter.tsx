@@ -1,223 +1,229 @@
-import * as React from "react";
+import * as React from 'react';
 
-import "./Filter.scss";
+import './Filter.scss';
 
-import {Search} from "../Search/Search";
-import Product from "../Product/Product";
-import {FilterPanel} from "../FilterPanel/FilterPanel";
+import Search from '../Search/Search';
+import Product from '../Product/Product';
+import FilterPanel from '../FilterPanel/FilterPanel';
 
-interface IFilterProps {
-    filterPanelShow: boolean,
-    onClosePanel:(e:React.MouseEvent<HTMLElement>)=>void,
-    favorite?: boolean
+interface FilterProps {
+  filterPanelShow: boolean;
+  onClosePanel: (e: React.MouseEvent<HTMLElement>) => void;
+  favorite?: boolean;
 }
 
-interface IFilterState {
-    filter: IFilter,
-    products: IProduct[]
+interface FilterState {
+  filter: FilterData;
+  products: ProductData[];
 }
 
-type TFilterCheckboxes = "green"|"red"|"white"|"puer"|"new_product"|"discount";
+type TFilterCheckboxes = 'green' | 'red' | 'white' | 'puer' | 'new_product' | 'discount';
 
-export class Filter extends React.Component<IFilterProps, IFilterState> {
-    private filter:IFilter;
-    constructor(props:IFilterProps){
-        super(props);
-        this.filter = {
-            green: false,
-            red: false,
-            white: false,
-            puer: false,
-            price: [],
-            min: 0,
-            max: 0,
-            new_product: false,
-            discount: false,
-            search: "",
-        };
+export class Filter extends React.Component<FilterProps, FilterState> {
+  private filter: FilterData;
 
-        this.state = {
-            filter: {...this.filter, price:[0, 0]},
-            products:[]
-        };
+  constructor(props: FilterProps) {
+    super(props);
+    this.filter = {
+      green: false,
+      red: false,
+      white: false,
+      puer: false,
+      price: [],
+      min: 0,
+      max: 0,
+      new_product: false,
+      discount: false,
+      search: '',
+    };
 
-        this.onSliderChange=this.onSliderChange.bind(this);
-        this.onLeftChange=this.onLeftChange.bind(this);
-        this.onRightChange=this.onRightChange.bind(this);
-        this.onClosePanel=this.onClosePanel.bind(this);
-        this.onSearchChange=this.onSearchChange.bind(this);
-        this.onGreenChange=this.onGreenChange.bind(this);
-        this.onRedChange=this.onRedChange.bind(this);
-        this.onWhiteChange=this.onWhiteChange.bind(this);
-        this.onPuerChange=this.onPuerChange.bind(this);
-        this.onNewProductChange=this.onNewProductChange.bind(this);
-        this.onDiscountChange=this.onDiscountChange.bind(this);
-        this.onApplyClick=this.onApplyClick.bind(this);
-        this.applyFilter=this.applyFilter.bind(this);
-        this.onClickFavorite=this.onClickFavorite.bind(this);
+    this.state = {
+      filter: { ...this.filter, price: [0, 0] },
+      products: [],
+    };
+  }
 
-    }
-    componentDidMount() {
-        this.updateData();
-    }
-    updateData(){
-        let url = new URL('http://api.' + window.location.host + '/tea');
-        let params = {
-            search:this.filter.search,
-            green: +this.filter.green,
-            red: +this.filter.red,
-            white: +this.filter.white,
-            puer: +this.filter.puer,
-            new_product: +this.filter.new_product,
-            discount: +this.filter.discount,
-        };
-        (Object.keys(params)  as Array<keyof typeof params>).forEach((key)=>{
-            url.searchParams.append(key, params[key].toString());
+  componentDidMount = (): void => {
+    this.updateData();
+  };
+
+  onGreenChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    this.setFilterCheckboxState('green', e.target.checked);
+  };
+
+  onSliderChange = (value: number[]): void => {
+    this.setState(prevState => {
+      const { filter } = prevState;
+      filter.price = value;
+      return { filter };
+    });
+  };
+
+  onLeftChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const value = +e.target.value;
+    this.setState(prevState => {
+      const { filter } = prevState;
+      filter.price = [value, prevState.filter.price[1]];
+      return { filter };
+    });
+  };
+
+  onRightChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const value = +e.target.value;
+    this.setState(prevState => {
+      const { filter } = prevState;
+      filter.price = [prevState.filter.price[0], value];
+      return { filter };
+    });
+  };
+
+  onClosePanel = (e: React.MouseEvent<HTMLElement>): void => {
+    const { onClosePanel } = this.props;
+    this.setState(() => ({ filter: { ...this.filter, price: this.filter.price } }));
+    onClosePanel(e);
+  };
+
+  onSearchChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    this.filter.search = e.target.value;
+  };
+
+  onRedChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    this.setFilterCheckboxState('red', e.target.checked);
+  };
+
+  onWhiteChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    this.setFilterCheckboxState('white', e.target.checked);
+  };
+
+  onPuerChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    this.setFilterCheckboxState('puer', e.target.checked);
+  };
+
+  onNewProductChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    this.setFilterCheckboxState('new_product', e.target.checked);
+  };
+
+  onDiscountChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    this.setFilterCheckboxState('discount', e.target.checked);
+  };
+
+  onApplyClick = (e: React.MouseEvent<HTMLElement>): void => {
+    const { onClosePanel } = this.props;
+    this.applyFilter();
+    onClosePanel(e);
+  };
+
+  onClickFavorite = (id: number): void => {
+    const { favorite } = this.props;
+    if (favorite) {
+      this.setState(prevState => {
+        const products = prevState.products.filter(v => {
+          return v.id !== id;
         });
+        return { products };
+      });
+    }
+  };
 
-        if (this.filter.price.length){
-            url.searchParams.append("price[]", this.filter.price[0].toString());
-            url.searchParams.append("price[]", this.filter.price[1].toString());
-        }
+  private setFilterCheckboxState = (prop: TFilterCheckboxes, checked: boolean): void => {
+    this.setState(prevState => ({ filter: { ...prevState.filter, [prop]: checked } }));
+  };
 
-        if (this.props.favorite){
-            url.searchParams.append('favorite', (+this.props.favorite).toString())
-        }
+  updateData = (): void => {
+    const url = new URL(`http://api.${window.location.host}/tea`);
+    const { favorite } = this.props;
+    const params = {
+      search: this.filter.search,
+      green: +this.filter.green,
+      red: +this.filter.red,
+      white: +this.filter.white,
+      puer: +this.filter.puer,
+      new_product: +this.filter.new_product,
+      discount: +this.filter.discount,
+    };
+    (Object.keys(params) as Array<keyof typeof params>).forEach(key => {
+      url.searchParams.append(key, params[key].toString());
+    });
 
-        fetch(url.toString(), {mode:'cors'})
-            .then(response=>response.json())
-            .then(data=>{
-                this.updateFilter(data);
-            });
+    if (this.filter.price.length) {
+      url.searchParams.append('price[]', this.filter.price[0].toString());
+      url.searchParams.append('price[]', this.filter.price[1].toString());
     }
-    updateFilter(data:IProductResp){
-        if (!this.filter.price.length){
-            this.filter.price = [data.price.min, data.price.max];
-        }
 
-        this.filter.min = data.price.min;
-        this.filter.max = data.price.max;
+    if (favorite) {
+      url.searchParams.append('favorite', (+favorite).toString());
+    }
 
-        this.setState(()=>{
-            return {filter:{...this.filter, price:[...this.filter.price]}, products:data.data};
-        });
-    }
-    onSliderChange = (value:number[]) => {
-        this.setState((prevState)=>{
-            let filter:IFilter = prevState.filter;
-            filter.price = value;
-            return {filter:filter}
-        });
-    };
-    onLeftChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-        const value = +e.target.value;
-        this.setState((prevState)=>{
-            let filter = prevState.filter;
-            filter.price = [value, prevState.filter.price[1]];
-            return {filter: filter}
-        });
-    };
-    onRightChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-        const value = +e.target.value;
-        this.setState((prevState)=> {
-            let filter = prevState.filter;
-            filter.price = [prevState.filter.price[0], value];
-            return {filter: filter}
-        });
-    };
-    onClosePanel = (e:React.MouseEvent<HTMLElement>)=>{
-        this.setState(()=>({filter:{...this.filter, price: this.filter.price}}));
-        this.props.onClosePanel(e);
-    };
-    onSearchChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-        this.filter.search = e.target.value;
-    };
-    onGreenChange(e:React.ChangeEvent<HTMLInputElement>){
-        this.setFilterCheckboxState("green", e.target.checked);
-    };
-    onRedChange(e:React.ChangeEvent<HTMLInputElement>){
-        this.setFilterCheckboxState("red", e.target.checked);
-    };
-    onWhiteChange(e:React.ChangeEvent<HTMLInputElement>){
-        this.setFilterCheckboxState("white", e.target.checked);
-    };
-    onPuerChange(e:React.ChangeEvent<HTMLInputElement>){
-        this.setFilterCheckboxState("puer", e.target.checked);
-    };
-    onNewProductChange(e:React.ChangeEvent<HTMLInputElement>){
-        this.setFilterCheckboxState("new_product", e.target.checked);
-    };
-    onDiscountChange(e:React.ChangeEvent<HTMLInputElement>){
-        this.setFilterCheckboxState("discount", e.target.checked);
-    };
-    private setFilterCheckboxState(prop:TFilterCheckboxes, checked:boolean){
-        this.setState((prevState)=>({filter: {...prevState.filter,[prop]:checked}}))
-    }
-    onApplyClick(e:React.MouseEvent<HTMLElement>){
-        this.applyFilter();
-        this.props.onClosePanel(e);
-    }
-    applyFilter(){
-        this.setState((prevState)=>{
-            this.filter = {...prevState.filter, price:[...prevState.filter.price], search:this.filter.search};
-            this.updateData();
-        });
-    }
-    onClickFavorite(id:number){
-        if(this.props.favorite){
-            this.setState((prevState)=>{
-                let products = prevState.products.filter((v)=>{
-                    return v.id !== id;
-                });
-                return {products:products};
-            });
-        }
-    }
-    createProducts(){
-        let products:JSX.Element[] = [];
-            this.state.products.map((v)=>{
-                let product = (
-                    <Product onClickFavorite={this.onClickFavorite} key={v.id} data={v}/>
-                );
-                if (this.props.favorite){
-                    if (v.favorite){
-                        products.push(product);
-                    }
-                }else{
-                    products.push(product);
-                }
+    fetch(url.toString(), { mode: 'cors' })
+      .then(response => response.json())
+      .then(data => {
+        this.updateFilter(data);
+        return null;
+      })
+      .catch(e => {
+        throw new Error(e);
+      });
+  };
 
+  updateFilter = (data: ProductResp): void => {
+    if (!this.filter.price.length) {
+      this.filter.price = [data.price.min, data.price.max];
+    }
 
-            });
-        return products;
+    this.filter.min = data.price.min;
+    this.filter.max = data.price.max;
+
+    this.setState(() => {
+      return { filter: { ...this.filter, price: [...this.filter.price] }, products: data.data };
+    });
+  };
+
+  applyFilter = (): void => {
+    this.setState(prevState => {
+      this.filter = { ...prevState.filter, price: [...prevState.filter.price], search: this.filter.search };
+      this.updateData();
+    });
+  };
+
+  createProducts = (): JSX.Element[] => {
+    const { products } = this.state;
+    const { favorite } = this.props;
+    let renderingProducts = products;
+    if (favorite) {
+      renderingProducts = products.filter(v => v.favorite);
     }
-    render() {
-        return (
-            <div className="filter">
-                <div className="filter__panel">
-                    <FilterPanel
-                        onGreenChange={this.onGreenChange}
-                        onRedChange={this.onRedChange}
-                        onWhiteChange={this.onWhiteChange}
-                        onPuerChange={this.onPuerChange}
-                        onNewProductChange={this.onNewProductChange}
-                        onDiscountChange={this.onDiscountChange}
-                        onLeftChange={this.onLeftChange}
-                        onRightChange={this.onRightChange}
-                        onSliderChange={this.onSliderChange}
-                        onApplyClick={this.onApplyClick}
-                        filter={this.state.filter}
-                        onClosePanel={this.onClosePanel}
-                        filterPanelShow={this.props.filterPanelShow}
-                    />
-                </div>
-                <div className="filter__content">
-                <Search onPressEnter={this.applyFilter} onChange={this.onSearchChange}/>
-                    <div className="filter__products">
-                        {this.createProducts()}
-                    </div>
-                </div>
-            </div>
-        );
-    }
+    return renderingProducts.map(v => <Product onClickFavorite={this.onClickFavorite} key={v.id} data={v} />);
+  };
+
+  render = (): JSX.Element => {
+    const { filter } = this.state;
+    const { filterPanelShow } = this.props;
+    return (
+      <div className="filter">
+        <div className="filter__panel">
+          <FilterPanel
+            onGreenChange={this.onGreenChange}
+            onRedChange={this.onRedChange}
+            onWhiteChange={this.onWhiteChange}
+            onPuerChange={this.onPuerChange}
+            onNewProductChange={this.onNewProductChange}
+            onDiscountChange={this.onDiscountChange}
+            onLeftChange={this.onLeftChange}
+            onRightChange={this.onRightChange}
+            onSliderChange={this.onSliderChange}
+            onApplyClick={this.onApplyClick}
+            filter={filter}
+            onClosePanel={this.onClosePanel}
+            filterPanelShow={filterPanelShow}
+          />
+        </div>
+        <div className="filter__content">
+          <Search onPressEnter={this.applyFilter} onChange={this.onSearchChange} />
+          <div className="filter__products">{this.createProducts()}</div>
+        </div>
+      </div>
+    );
+  };
 }
+
+export default Filter;

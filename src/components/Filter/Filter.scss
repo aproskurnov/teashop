@@ -1,19 +1,19 @@
-.filter{
+.filter {
   display: flex;
-  &__panel{
+  &__panel {
     max-width: 300px;
 
     @media (min-width: 768px) {
       margin-right: 5rem;
     }
   }
-  &__content{
+  &__content {
     width: 100%;
     @media (min-width: 768px) {
       margin-top: 5rem;
     }
   }
-  &__products{
+  &__products {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;

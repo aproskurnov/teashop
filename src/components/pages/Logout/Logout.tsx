@@ -1,62 +1,46 @@
-import * as React from "react";
+import * as React from 'react';
 
-import {logoutAction} from "../../../actions";
-import { Redirect } from 'react-router-dom'
-import {connect} from 'react-redux'
-import {IAuthAction, IUserAuth} from "../../../actions/types";
-import {Dispatch} from "redux";
+import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+import { AuthAction, UserAuth } from '../../../actions/types';
+import { logoutAction } from '../../../actions';
 
-interface ILogoutProps{
-
+interface StateProps {
+  isAuthenticated: boolean;
+}
+interface DispatchProps {
+  logout: () => void;
 }
 
-interface ILogoutState{
+type Props = StateProps & DispatchProps;
 
-}
-
-interface IStateProps{
-    isAuthenticated: boolean
-}
-interface IDispatchProps{
-    logout: ()=>void
-}
-
-type Props = ILogoutProps & IStateProps & IDispatchProps;
-
-
-class Logout extends React.Component<Props, ILogoutState> {
-    constructor(props:Props){
-        super(props);
-
+class Logout extends React.Component<Props, {}> {
+  process = (): JSX.Element => {
+    const { isAuthenticated, logout } = this.props;
+    if (!isAuthenticated) {
+      return <Redirect to="/" />;
     }
-    process(){
-        if (!this.props.isAuthenticated){
-            return <Redirect to={"/"}/>;
-        }else{
-            this.props.logout();
-            localStorage.removeItem('token');
-            return <div/>
-        }
-    }
-    render() {
-        return (
-            <div className="container container_big">
-                {this.process()}
-            </div>
-        );
-    }
+    logout();
+    localStorage.removeItem('token');
+    return null;
+  };
+
+  render = (): JSX.Element => {
+    return <div className="container container_big">{this.process()}</div>;
+  };
 }
 
-const mapStateToProps:(state:IUserAuth)=>IStateProps = (state)=>{
-    return {
-        isAuthenticated:state.isAuthenticated
-    }
+const mapStateToProps: (state: UserAuth) => StateProps = state => {
+  return {
+    isAuthenticated: state.isAuthenticated,
+  };
 };
 
-const mapDispatchToProps:(dispatch:Dispatch<IAuthAction>)=>IDispatchProps = (dispatch) => {
-    return {
-        logout: ()=>dispatch(logoutAction())
-    }
+const mapDispatchToProps: (dispatch: Dispatch<AuthAction>) => DispatchProps = dispatch => {
+  return {
+    logout: (): AuthAction => dispatch(logoutAction()),
+  };
 };
 
-export default connect<IStateProps, IDispatchProps, ILogoutProps>(mapStateToProps, mapDispatchToProps)(Logout);
+export default connect<StateProps, DispatchProps, {}>(mapStateToProps, mapDispatchToProps)(Logout);

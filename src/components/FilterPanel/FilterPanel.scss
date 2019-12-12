@@ -1,8 +1,7 @@
-@import "../../globals";
+@import '../../globals';
 
-.filter-panel{
-
-  &__layout{
+.filter-panel {
+  &__layout {
     display: none;
     background-color: $dark;
     width: 100%;
@@ -13,7 +12,7 @@
     left: 0;
     z-index: 2;
 
-    &_showed{
+    &_showed {
       display: block;
     }
 
@@ -21,7 +20,7 @@
       display: none;
     }
   }
-  &__content{
+  &__content {
     display: none;
     z-index: 5;
     position: absolute;
@@ -32,7 +31,7 @@
     width: 90%;
     padding: 3rem;
 
-    &_showed{
+    &_showed {
       display: block;
     }
 
@@ -43,7 +42,7 @@
       width: 100%;
     }
   }
-  &__close{
+  &__close {
     position: absolute;
     right: 2.9rem;
     top: 3.8rem;
@@ -54,9 +53,8 @@
       display: none;
     }
   }
-  &__checkbox-group{
-  }
-  &__button{
+
+  &__button {
     margin-top: 2rem;
     text-align: center;
   }

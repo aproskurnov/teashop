@@ -1,10 +1,10 @@
-@import "../../globals";
+@import '../../globals';
 
-.rate{
-  &__input{
+.rate {
+  &__input {
     display: none;
   }
-  &__element{
+  &__element {
     color: $yellow;
   }
 }

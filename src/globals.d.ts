@@ -1,45 +1,45 @@
-declare module "*.png" {
-    const value: any;
-    export = value;
+declare module '*.png' {
+  const value: string;
+  export = value;
 }
 
-interface ICategory{
-    id: number,
-    title: string
+interface Category {
+  id: number;
+  title: string;
 }
 
-interface IPrice{
-    min:number,
-    max:number
+interface Price {
+  min: number;
+  max: number;
 }
 
-interface IProductResp{
-    data: IProduct[],
-    price: IPrice
+interface ProductResp {
+  data: ProductData[];
+  price: Price;
 }
 
-interface IProduct {
-    id: number,
-    title: string,
-    description: string,
-    discount: number,
-    price: number,
-    new_product: boolean,
-    favorite: boolean,
-    image: string,
-    rating: number,
-    category: ICategory
+interface ProductData {
+  id: number;
+  title: string;
+  description: string;
+  discount: number;
+  price: number;
+  new_product: boolean;
+  favorite: boolean;
+  image: string;
+  rating: number;
+  category: Category;
 }
 
-interface IFilter{
-    green: boolean,
-    red: boolean,
-    white: boolean,
-    puer: boolean,
-    price: number[],
-    min: number,
-    max: number,
-    new_product: boolean,
-    discount: boolean,
-    search: string
+interface FilterData {
+  green: boolean;
+  red: boolean;
+  white: boolean;
+  puer: boolean;
+  price: number[];
+  min: number;
+  max: number;
+  new_product: boolean;
+  discount: boolean;
+  search: string;
 }

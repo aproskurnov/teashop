@@ -1,37 +1,38 @@
-import * as React from "react";
+import * as React from 'react';
 
-import {Range} from "rc-slider";
+import { Range } from 'rc-slider';
 
-import "rc-slider/assets/index.css";
-import "./Slider.scss";
+import 'rc-slider/assets/index.css';
+import './Slider.scss';
 
-import {Input} from "../Input/Input";
+import { Input } from '../Input/Input';
 
-interface ISliderProps{
-    value:number[],
-    min: number,
-    max:number,
-    onSliderChange:(value:number[])=>void,
-    onLeftChange:(e:React.ChangeEvent<HTMLElement>)=>void,
-    onRightChange:(e:React.ChangeEvent<HTMLElement>)=>void,
+interface SliderProps {
+  value: number[];
+  min: number;
+  max: number;
+  onSliderChange: (value: number[]) => void;
+  onLeftChange: (e: React.ChangeEvent<HTMLElement>) => void;
+  onRightChange: (e: React.ChangeEvent<HTMLElement>) => void;
 }
 
-export class Slider extends React.Component<ISliderProps, {}> {
-    constructor(props:ISliderProps){
-        super(props);
-    }
+const Slider: React.FunctionComponent<SliderProps> = ({
+  min,
+  max,
+  value,
+  onLeftChange,
+  onRightChange,
+  onSliderChange,
+}: SliderProps) => (
+  <div className="slider">
+    <div className="slider__inputs">
+      <Input type="number" centered value={value[0]} onChange={onLeftChange} />
+      <Input type="number" centered value={value[1]} onChange={onRightChange} />
+    </div>
+    <div className="slider__slider">
+      <Range onChange={onSliderChange} value={value} min={min} max={max} />
+    </div>
+  </div>
+);
 
-    render() {
-        return (
-            <div className="slider">
-                <div className="slider__inputs">
-                    <Input type={"number"} centered={true} value={this.props.value[0]} onChange={this.props.onLeftChange}/>
-                    <Input type={"number"} centered={true} value={this.props.value[1]} onChange={this.props.onRightChange}/>
-                </div>
-                <div className="slider__slider">
-                    <Range onChange={this.props.onSliderChange} value={this.props.value} min={this.props.min} max={this.props.max} />
-                </div>
-            </div>
-        );
-    }
-}
+export default Slider;
